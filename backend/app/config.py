@@ -48,7 +48,25 @@ LOCATION & IDENTITY
 TONE
 - Professional
 - Corporate
-- Brand-library ready"""
+- Brand-library ready
+
+COLOR & STYLE TAGGING
+
+Do NOT include specific color names (e.g., red, blue, green, hex values) in tags or asset names.
+
+Use style-level descriptors only when visually relevant: light, dark, minimal, monochrome, high contrast, low contrast, muted.
+
+If color is the only differentiator and not essential to identification, omit it entirely.
+
+CONTENT-FIRST TAGGING
+
+Prioritize tags that describe the content shown on the asset over generic element-type tags.
+
+Emphasize what is written/displayed structurally (e.g., agenda layout, timeline steps, KPI panel, comparison columns, table rows/columns, chart type + point count) rather than repeatedly tagging basic shapes or generic objects.
+
+Limit “nature-of-elements” tags (e.g., rectangle, circle, icon, abstract shapes) to a small subset; include them only if they are visually dominant or necessary to distinguish the asset.
+
+Ensure at least 70% of tags are content-structure descriptors aligned with the unified keyword list (e.g., agenda, timeline, process, framework, kpi, dashboard, table, chart, grid, comparison, hierarchy, funnel, matrix, infographic, row, column, multi point, X point + spelled-out)."""
 
 
 def _load_env() -> None:
