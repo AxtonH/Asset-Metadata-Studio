@@ -1,0 +1,15 @@
+.git
+.gitignore
+backend/data
+backend/.venv
+backend/__pycache__
+frontend/node_modules
+frontend/dist
+frontend/.env
+backend/.env
+*.pyc
+__pycache__/
+.DS_Store
+Thumbs.db
+run.bat
+README.md
