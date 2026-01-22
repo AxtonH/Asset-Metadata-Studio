@@ -3,7 +3,7 @@
 Generate bilingual (English + Arabic) asset names and tags for slides, images, icons, and PPT files using GPT-5.1. The app processes each asset individually and exports results to Excel.
 
 ## Features
-- Upload up to 100 files per batch (PPT/PPTX are split into individual slides).
+- Upload up to 100 files per batch.
 - Editable prompt (defaults to the provided metadata prompt).
 - Parallel processing with a safe default of 6 concurrent requests.
 - Excel export with uploaded filename, English name, Arabic name, and tags.
