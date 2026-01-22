@@ -28,7 +28,6 @@ TAGS RULES
 - Single-line, comma-separated list.
 - Tags must be bilingual (English + Arabic).
 - Minimum 30 tags per asset.
-- Tags must be visual-only (no inferred meaning).
 - Avoid redundancy.
 - Use stock-photo style descriptive terms.
 KEYWORD CONSISTENCY
@@ -66,7 +65,9 @@ Emphasize what is written/displayed structurally (e.g., agenda layout, timeline 
 
 Limit “nature-of-elements” tags (e.g., rectangle, circle, icon, abstract shapes) to a small subset; include them only if they are visually dominant or necessary to distinguish the asset.
 
-Ensure at least 70% of tags are content-structure descriptors aligned with the unified keyword list (e.g., agenda, timeline, process, framework, kpi, dashboard, table, chart, grid, comparison, hierarchy, funnel, matrix, infographic, row, column, multi point, X point + spelled-out)."""
+Ensure at least 70% of tags are content-structure descriptors aligned with the unified keyword list (e.g., agenda, timeline, process, framework, kpi, dashboard, table, chart, grid, comparison, hierarchy, funnel, matrix, infographic, row, column, multi point, X point + spelled-out).
+
+Discribe the content and the visuals in equal meassures"""
 
 
 def _load_env() -> None:
