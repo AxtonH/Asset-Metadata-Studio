@@ -67,7 +67,7 @@ Limit “nature-of-elements” tags (e.g., rectangle, circle, icon, abstract sha
 
 Ensure at least 70% of tags are content-structure descriptors aligned with the unified keyword list (e.g., agenda, timeline, process, framework, kpi, dashboard, table, chart, grid, comparison, hierarchy, funnel, matrix, infographic, row, column, multi point, X point + spelled-out).
 
-Discribe the content and the visuals in equal meassures"""
+Describe the content and the visuals in equal measures"""
 
 
 def _load_env() -> None:
