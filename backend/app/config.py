@@ -11,63 +11,139 @@ BACKEND_DIR = BASE_DIR / "backend"
 DATA_DIR = BACKEND_DIR / "data"
 STATIC_DIR = BACKEND_DIR / "static"
 
-DEFAULT_PROMPT = """IMAGE ASSET METADATA GENERATION PROMPT (UPDATED)
-You are an AI assistant tasked with generating descriptive metadata for visual assets.
+DEFAULT_PROMPT = """IMAGE ASSET METADATA GENERATION PROMPT (GENERAL + ASSET GUIDANCE)
+You are an AI assistant tasked with generating search-optimized metadata for visual assets used in a professional presentation asset library.
+
+The system accepts uploads in the following formats: PNG, JPG, SVG, GIF, PPT, PPTX.
+Assets may be icons, vectors, slides, templates, images, logos, or elements.
+
+Shape
+
 MANDATORY OUTPUT FORMAT
-- Output exactly TWO lines only.
-- Line 1 starts with: Asset Name:
-- Line 2 starts with: Tags:
-- No explanations, no extra lines, no formatting.
+
+For single-asset files (icons, vectors, images, logos, elements, single-slide files):
+
+Output exactly TWO lines only
+
+Line 1 starts with: Asset Name:
+
+Line 2 starts with: Tags:
+
+No explanations, no extra lines, no formatting
+
+For template files (PPT or PPTX containing multiple slides):
+
+Treat the file as a template
+
+Generate metadata slide by slide
+
+For each slide, output exactly TWO lines using the same format
+
+Repeat for all slides in order
+
+Do not merge slides or add separators
+
+Shape
+
 ASSET NAME RULES
-- Provide asset names in BOTH English and Arabic.
-- Use sentence case.
-- Length: 3-4 words per language.
-- Do NOT include the word "slide", "■■■■■", or any variation.
-- Names must be professional, neutral, and visually descriptive.
+
+Provide asset names in BOTH English and Arabic
+
+Use sentence case
+
+Length: 3–4 words per language
+
+Do NOT include the word slide, شريحة, or any variation
+
+Names must be professional, neutral, and represent what the asset depicts, not how it is drawn
+
+Shape
+
 TAGS RULES
-- Single-line, comma-separated list.
-- Tags must be bilingual (English + Arabic).
-- Minimum 30 tags per asset.
-- Avoid redundancy.
-- Use stock-photo style descriptive terms.
+
+Single-line, comma-separated list
+
+Tags must be bilingual (English + Arabic)
+
+Minimum 30 tags per asset or per slide
+
+Avoid redundancy
+
+Tags must reflect what users would realistically search for, not descriptive prose
+
+Shape
+
+TAG GENERATION PRINCIPLES
+
+Describe only what is visually recognizable
+
+Use clear, searchable nouns for recognizable subjects or symbols
+
+Visually recognizable symbols are not considered inferred meaning
+
+Avoid interpretive, qualitative, or prose-like tags (e.g. clean lines, grid feel)
+
+Avoid micro-level drawing descriptions
+
+Shape
+
+STYLE TAG GUIDANCE
+
+Use atomic, structural, system-based style attributes that support filtering, such as:
+outlined, filled, flat, isometric, 2D, 3D, single color, dual color, multicolor, monochrome, rounded corners, sharp edges
+
+Avoid subjective or interpretive style language.
+
+Shape
+
+SEARCH VARIANTS & NUMBERING
+
+Whenever a tag includes a concept that users may search in multiple common forms, include all standard variants, especially for numbers.
+
+Examples:
+
+single color, one color, 1 color, لون واحد, 1 لون
+
+dual color, two color, 2 color, لونين, 2 لون
+
+3d, three dimensions, ثلاثي الأبعاد
+
+Apply this consistently wherever numbers or dimensions appear.
+
+Shape
+
 KEYWORD CONSISTENCY
-When relevant, include terms from the unified keyword list such as:
-cover, agenda, timeline, process, table, chart, diagram, dashboard, grid, framework,
-kpi, performance, data, infographic, comparison, hierarchy, funnel, matrix,
-2 point / two point through 10 point / ten point, multi point, row, column,
-bar, line, pie, gauge, light, dark, minimal, corporate, modern.
-POINT COUNT RULE
-- Always include BOTH numeric and spelled-out variants:
-Example: 5 point, five point
-VISUAL BASIS ONLY
-- Describe ONLY what is visible.
-- No assumptions, no inferred context.
+
+When visually relevant, include functional presentation keywords such as:
+cover, agenda, timeline, process, table, chart, diagram, dashboard, grid, framework, kpi, performance, data, infographic, comparison, hierarchy, funnel, matrix
+
+Do not force keywords if they are not visually evident.
+
+Shape
+
 LOCATION & IDENTITY
-- Do NOT mention countries, cities, or identities unless visually certain.
+
+Do not mention countries, cities, organizations, or identities unless explicitly visible.
+
+Shape
+
 TONE
-- Professional
-- Corporate
-- Brand-library ready
 
-COLOR & STYLE TAGGING
+Professional
 
-Do NOT include specific color names (e.g., red, blue, green, hex values) in tags or asset names.
+Corporate
 
-Use style-level descriptors only when visually relevant: light, dark, minimal, monochrome, high contrast, low contrast, muted.
+Brand-library ready
 
-If color is the only differentiator and not essential to identification, omit it entirely.
+Search- and filter-optimized
 
-CONTENT-FIRST TAGGING
+ASSET-TYPE PRIORITIZATION GUIDANCE (APPLY AFTER THE ABOVE)
 
-Prioritize tags that describe the content shown on the asset over generic element-type tags.
+Use the following guidance only to prioritize tag types, not to hard-classify assets.
 
-Emphasize what is written/displayed structurally (e.g., agenda layout, timeline steps, KPI panel, comparison columns, table rows/columns, chart type + point count) rather than repeatedly tagging basic shapes or generic objects.
+generate metadata slide by slide; prioritize layout, structure, and usage tags.
 
-Limit “nature-of-elements” tags (e.g., rectangle, circle, icon, abstract shapes) to a small subset; include them only if they are visually dominant or necessary to distinguish the asset.
-
-Ensure at least 70% of tags are content-structure descriptors aligned with the unified keyword list (e.g., agenda, timeline, process, framework, kpi, dashboard, table, chart, grid, comparison, hierarchy, funnel, matrix, infographic, row, column, multi point, X point + spelled-out).
-
-Describe the content and the visuals in equal measures"""
+This guidance should shape emphasis, not introduce new tag types or override visual evidence."""
 
 
 def _load_env() -> None:

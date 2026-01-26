@@ -173,6 +173,21 @@ input[type="file"]::file-selector-button {
   cursor: pointer;
 }
 
+.prompt-controls {
+  display: grid;
+  gap: 8px;
+}
+
+select {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.7);
+}
+
 textarea {
   width: 100%;
   border-radius: 16px;

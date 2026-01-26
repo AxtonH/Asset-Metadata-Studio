@@ -8,44 +8,186 @@ const MAX_FILES = 100;
 const ACCEPTED_TYPES =
   ".png,.jpg,.jpeg,.gif,.svg,.ppt,.pptx,.PNG,.JPG,.JPEG,.GIF,.SVG,.PPT,.PPTX";
 
-const DEFAULT_PROMPT = `IMAGE ASSET METADATA GENERATION PROMPT (UPDATED)
-You are an AI assistant tasked with generating descriptive metadata for visual assets.
+const PROMPT_CATEGORIES = [
+  {
+    id: "templates",
+    label: "Templates",
+    guidance:
+      "generate metadata slide by slide; prioritize layout, structure, and usage tags.",
+  },
+  {
+    id: "single-slides",
+    label: "Single slides",
+    guidance: "prioritize layout, structure, and presentation function.",
+  },
+  {
+    id: "icons-vectors",
+    label: "Icon & vectors",
+    guidance:
+      "prioritize representational meaning, search synonyms, and system style; avoid layout and structure tags.",
+  },
+  {
+    id: "images",
+    label: "Images",
+    guidance: "prioritize visible subjects and scenes; avoid vector or layout logic.",
+  },
+  {
+    id: "logos",
+    label: "Logos",
+    guidance: "prioritize mark type and color behavior; avoid usage or layout tags.",
+  },
+  {
+    id: "elements",
+    label: "Elements",
+    guidance:
+      "prioritize functional role (e.g. data indicator, process flow, map, frame, container, UI device, arrow, connector) over appearance.",
+  },
+];
+
+const DEFAULT_CATEGORY = PROMPT_CATEGORIES[0].id;
+
+const BASE_PROMPT = `IMAGE ASSET METADATA GENERATION PROMPT (GENERAL + ASSET GUIDANCE)
+You are an AI assistant tasked with generating search-optimized metadata for visual assets used in a professional presentation asset library.
+
+The system accepts uploads in the following formats: PNG, JPG, SVG, GIF, PPT, PPTX.
+Assets may be icons, vectors, slides, templates, images, logos, or elements.
+
+Shape
+
 MANDATORY OUTPUT FORMAT
-- Output exactly TWO lines only.
-- Line 1 starts with: Asset Name:
-- Line 2 starts with: Tags:
-- No explanations, no extra lines, no formatting.
+
+For single-asset files (icons, vectors, images, logos, elements, single-slide files):
+
+Output exactly TWO lines only
+
+Line 1 starts with: Asset Name:
+
+Line 2 starts with: Tags:
+
+No explanations, no extra lines, no formatting
+
+For template files (PPT or PPTX containing multiple slides):
+
+Treat the file as a template
+
+Generate metadata slide by slide
+
+For each slide, output exactly TWO lines using the same format
+
+Repeat for all slides in order
+
+Do not merge slides or add separators
+
+Shape
+
 ASSET NAME RULES
-- Provide asset names in BOTH English and Arabic.
-- Use sentence case.
-- Length: 3-4 words per language.
-- Do NOT include the word "slide", "■■■■■", or any variation.
-- Names must be professional, neutral, and visually descriptive.
+
+Provide asset names in BOTH English and Arabic
+
+Use sentence case
+
+Length: 3–4 words per language
+
+Do NOT include the word slide, شريحة, or any variation
+
+Names must be professional, neutral, and represent what the asset depicts, not how it is drawn
+
+Shape
+
 TAGS RULES
-- Single-line, comma-separated list.
-- Tags must be bilingual (English + Arabic).
-- Minimum 30 tags per asset.
-- Tags must be visual-only (no inferred meaning).
-- Avoid redundancy.
-- Use stock-photo style descriptive terms.
+
+Single-line, comma-separated list
+
+Tags must be bilingual (English + Arabic)
+
+Minimum 30 tags per asset or per slide
+
+Avoid redundancy
+
+Tags must reflect what users would realistically search for, not descriptive prose
+
+Shape
+
+TAG GENERATION PRINCIPLES
+
+Describe only what is visually recognizable
+
+Use clear, searchable nouns for recognizable subjects or symbols
+
+Visually recognizable symbols are not considered inferred meaning
+
+Avoid interpretive, qualitative, or prose-like tags (e.g. clean lines, grid feel)
+
+Avoid micro-level drawing descriptions
+
+Shape
+
+STYLE TAG GUIDANCE
+
+Use atomic, structural, system-based style attributes that support filtering, such as:
+outlined, filled, flat, isometric, 2D, 3D, single color, dual color, multicolor, monochrome, rounded corners, sharp edges
+
+Avoid subjective or interpretive style language.
+
+Shape
+
+SEARCH VARIANTS & NUMBERING
+
+Whenever a tag includes a concept that users may search in multiple common forms, include all standard variants, especially for numbers.
+
+Examples:
+
+single color, one color, 1 color, لون واحد, 1 لون
+
+dual color, two color, 2 color, لونين, 2 لون
+
+3d, three dimensions, ثلاثي الأبعاد
+
+Apply this consistently wherever numbers or dimensions appear.
+
+Shape
+
 KEYWORD CONSISTENCY
-When relevant, include terms from the unified keyword list such as:
-cover, agenda, timeline, process, table, chart, diagram, dashboard, grid, framework,
-kpi, performance, data, infographic, comparison, hierarchy, funnel, matrix,
-2 point / two point through 10 point / ten point, multi point, row, column,
-bar, line, pie, gauge, light, dark, minimal, corporate, modern.
-POINT COUNT RULE
-- Always include BOTH numeric and spelled-out variants:
-Example: 5 point, five point
-VISUAL BASIS ONLY
-- Describe ONLY what is visible.
-- No assumptions, no inferred context.
+
+When visually relevant, include functional presentation keywords such as:
+cover, agenda, timeline, process, table, chart, diagram, dashboard, grid, framework, kpi, performance, data, infographic, comparison, hierarchy, funnel, matrix
+
+Do not force keywords if they are not visually evident.
+
+Shape
+
 LOCATION & IDENTITY
-- Do NOT mention countries, cities, or identities unless visually certain.
+
+Do not mention countries, cities, organizations, or identities unless explicitly visible.
+
+Shape
+
 TONE
-- Professional
-- Corporate
-- Brand-library ready`;
+
+Professional
+
+Corporate
+
+Brand-library ready
+
+Search- and filter-optimized
+
+ASSET-TYPE PRIORITIZATION GUIDANCE (APPLY AFTER THE ABOVE)
+
+Use the following guidance only to prioritize tag types, not to hard-classify assets.
+
+`;
+
+const PROMPT_FOOTER =
+  "\n\nThis guidance should shape emphasis, not introduce new tag types or override visual evidence.";
+
+const buildPrompt = (categoryId) => {
+  const category = PROMPT_CATEGORIES.find((item) => item.id === categoryId);
+  const guidance = category ? category.guidance : PROMPT_CATEGORIES[0].guidance;
+  return `${BASE_PROMPT}${guidance}${PROMPT_FOOTER}`;
+};
+
+const DEFAULT_PROMPT = buildPrompt(DEFAULT_CATEGORY);
 
 async function downloadExcel(url, filename) {
   const response = await fetch(url);
@@ -65,6 +207,7 @@ async function downloadExcel(url, filename) {
 
 function App() {
   const [files, setFiles] = useState([]);
+  const [promptCategory, setPromptCategory] = useState(DEFAULT_CATEGORY);
   const [prompt, setPrompt] = useState(DEFAULT_PROMPT);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
@@ -107,6 +250,12 @@ function App() {
 
   const handleRemoveFile = (indexToRemove) => {
     setFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
+  };
+
+  const handlePromptCategoryChange = (event) => {
+    const nextCategory = event.target.value;
+    setPromptCategory(nextCategory);
+    setPrompt(buildPrompt(nextCategory));
   };
 
   const handleClearFiles = () => {
@@ -268,6 +417,22 @@ function App() {
           <div className="card-title">
             <h2>Prompt</h2>
             <span className="muted">Editable per batch</span>
+          </div>
+          <div className="prompt-controls">
+            <label className="muted" htmlFor="prompt-category">
+              Prompt category
+            </label>
+            <select
+              id="prompt-category"
+              value={promptCategory}
+              onChange={handlePromptCategoryChange}
+            >
+              {PROMPT_CATEGORIES.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
           </div>
           <textarea
             value={prompt}
