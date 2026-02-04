@@ -176,7 +176,7 @@ _load_env()
 
 SETTINGS = Settings(
     openai_api_key=os.getenv("OPENAI_API_KEY", "").strip(),
-    openai_model=os.getenv("OPENAI_MODEL", "gpt-5-mini").strip(),
+    openai_model=os.getenv("OPENAI_MODEL", "gpt-5-image-mini").strip(),
     max_concurrency=int(os.getenv("MAX_CONCURRENCY", "6")),
     max_files=int(os.getenv("MAX_FILES", "100")),
     soffice_path=os.getenv("SOFFICE_PATH", "").strip(),

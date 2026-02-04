@@ -1,6 +1,6 @@
 # Asset Metadata Studio
 
-Generate bilingual (English + Arabic) asset names and tags for slides, images, icons, and PPT files using GPT-5-mini. The app processes each asset individually and exports results to Excel.
+Generate bilingual (English + Arabic) asset names and tags for slides, images, icons, and PPT files using GPT-5 Image Mini. The app processes each asset individually and exports results to Excel.
 
 ## Features
 - Upload up to 100 files per batch.
