@@ -5,6 +5,7 @@ WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
+# Rebuild frontend to ensure latest changes are included
 RUN npm run build
 
 FROM python:3.11-slim-bookworm AS runtime
