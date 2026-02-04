@@ -205,12 +205,12 @@ async def generate_metadata(
     data = base64.b64encode(image_path.read_bytes()).decode("ascii")
     data_url = f"data:{_mime_type(image_path)};base64,{data}"
 
-    # Check if model uses responses API (like gpt-5-image-mini, gpt-5.1) or chat completions API
-    # GPT-5 Image Mini and GPT-5.1 use the responses API for vision/image inputs
+    # Check if model uses responses API (like gpt-5-mini, gpt-5-image-mini, gpt-5.1) or chat completions API
+    # GPT-5 models use the responses API for vision/image inputs
     use_responses_api = "gpt-5" in model.lower()
     
     if use_responses_api:
-        # Use responses API for GPT-5 Image Mini and GPT-5 models
+        # Use responses API for GPT-5 models (including GPT-5-mini and GPT-5-image-mini)
         response = await client.responses.create(
             model=model,
             input=[

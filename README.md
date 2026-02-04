@@ -53,10 +53,12 @@ This repo includes a `Dockerfile` that builds the frontend and serves it from Fa
 1. Deploy to Railway using the Dockerfile (Railway auto-detects it).
 2. Set environment variables in Railway:
    - `OPENAI_API_KEY` (required)
-   - `OPENAI_MODEL` (optional)
+   - `OPENAI_MODEL` (optional, default: `gpt-5-mini`. Note: Railway may not have access to `gpt-5-image-mini`, use `gpt-5-mini` if you get model_not_found errors)
    - `MAX_CONCURRENCY` (optional)
    - `MAX_FILES` (optional)
    - `CORS_ORIGINS` (optional, set to your Railway domain or `*`)
 3. Railway supplies `PORT` automatically.
+
+**Note:** If you get a `model_not_found` error for `gpt-5-image-mini` on Railway, set `OPENAI_MODEL=gpt-5-mini` in Railway's environment variables. Railway's OpenAI API may not have access to all model variants.
 
 The UI is served at the root URL (`/`), and the API lives under `/api`.
