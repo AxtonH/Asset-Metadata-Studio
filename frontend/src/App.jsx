@@ -353,7 +353,7 @@ function App() {
           <h1>Visual asset naming, done fast.</h1>
           <p>
             Upload slides, images, icons, or PPT files. Generate bilingual names
-            and tags with GPT-5 Image Mini and export to Excel in one pass.
+            and tags with GPT-5-mini and export to Excel in one pass.
           </p>
         </div>
         <div className="hero-card">
