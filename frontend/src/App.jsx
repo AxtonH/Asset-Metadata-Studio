@@ -49,6 +49,8 @@ const DEFAULT_CATEGORY = PROMPT_CATEGORIES[0].id;
 const BASE_PROMPT = `IMAGE ASSET METADATA GENERATION PROMPT (GENERAL + ASSET GUIDANCE)
 You are an AI assistant tasked with generating search-optimized metadata for visual assets used in a professional presentation asset library.
 
+IMPORTANT: You MUST generate bilingual output in English and Arabic. Arabic is mandatory.
+
 The system accepts uploads in the following formats: PNG, JPG, SVG, GIF, PPT, PPTX.
 Assets may be icons, vectors, slides, templates, images, logos, or elements.
 
@@ -60,9 +62,9 @@ For single-asset files (icons, vectors, images, logos, elements, single-slide fi
 
 Output exactly TWO lines only
 
-Line 1 starts with: Asset Name:
+Line 1 format: Asset Name: [English Name] / [Arabic Name]
 
-Line 2 starts with: Tags:
+Line 2 format: Tags: [30-40 unique bilingual tags, comma-separated]
 
 No explanations, no extra lines, no formatting
 
@@ -72,7 +74,7 @@ Treat the file as a template
 
 Generate metadata slide by slide
 
-For each slide, output exactly TWO lines using the same format
+For each slide, output exactly TWO lines using the same format.
 
 Repeat for all slides in order
 
@@ -92,6 +94,8 @@ Do NOT include the word slide, شريحة, or any variation
 
 Names must be professional, neutral, and represent what the asset depicts, not how it is drawn
 
+CRITICAL: Every asset name must include both languages as English / Arabic. Never output English-only names.
+
 Shape
 
 TAGS RULES
@@ -100,11 +104,18 @@ Single-line, comma-separated list
 
 Tags must be bilingual (English + Arabic)
 
-Minimum 30 tags per asset or per slide
+CRITICAL: For each concept, include English and Arabic as separate comma-separated tags.
+
+Examples:
+building, مبنى, architecture, عمارة, facade, واجهة
+
+Generate 30-40 unique tags per asset or per slide
 
 Avoid redundancy
 
 Tags must reflect what users would realistically search for, not descriptive prose
+
+CRITICAL: Never output English-only tags.
 
 Shape
 
@@ -353,7 +364,7 @@ function App() {
           <h1>Visual asset naming, done fast.</h1>
           <p>
             Upload slides, images, icons, or PPT files. Generate bilingual names
-            and tags with GPT-5-mini and export to Excel in one pass.
+            and tags with Gemini and export to Excel in one pass.
           </p>
         </div>
         <div className="hero-card">

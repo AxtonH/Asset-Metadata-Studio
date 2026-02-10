@@ -12,12 +12,13 @@ Generate bilingual (English + Arabic) asset names and tags for slides, images, i
 - Python 3.10+
 - Node.js 18+
 - LibreOffice (soffice must be on PATH)
-- OpenAI API key
+- Google Gemini API key (get from https://aistudio.google.com/app/apikey)
 
 ## Setup
 1. Copy the env example and add your API key:
    - `backend\.env.example` -> `backend\.env`
-   - Set `OPENAI_API_KEY` and (optionally) `OPENAI_MODEL`
+   - Set `GOOGLE_API_KEY` and (optionally) `GOOGLE_MODEL`
+   - Get your API key from: https://aistudio.google.com/app/apikey
 2. Copy the frontend env example for local dev:
    - `frontend\.env.example` -> `frontend\.env`
    - Keep `VITE_API_BASE_URL=http://localhost:8000`
@@ -43,7 +44,7 @@ Generate bilingual (English + Arabic) asset names and tags for slides, images, i
 
 ## Troubleshooting
 - LibreOffice errors: confirm `soffice` runs from a terminal.
-- OpenAI errors: confirm `OPENAI_API_KEY` is set in `backend\.env`.
+- Google API errors: confirm `GOOGLE_API_KEY` is set in `backend\.env`. Check your API key at https://aistudio.google.com/app/apikey
 - CORS issues: frontend uses `http://localhost:5173` by default; update `frontend\.env.example` if needed.
 - PPT/PPTX conversion errors on Windows: set `SOFFICE_PATH` in `backend\.env`, for example `C:\Program Files\LibreOffice\program\soffice.exe`.
 
@@ -52,13 +53,11 @@ This repo includes a `Dockerfile` that builds the frontend and serves it from Fa
 
 1. Deploy to Railway using the Dockerfile (Railway auto-detects it).
 2. Set environment variables in Railway:
-   - `OPENAI_API_KEY` (required)
-   - `OPENAI_MODEL` (optional, default: `gpt-5-mini`. Note: Railway may not have access to `gpt-5-image-mini`, use `gpt-5-mini` if you get model_not_found errors)
+   - `GOOGLE_API_KEY` (required) - Get from https://aistudio.google.com/app/apikey
+   - `GOOGLE_MODEL` (optional, default: `gemini-2.5-flash-lite`)
    - `MAX_CONCURRENCY` (optional)
    - `MAX_FILES` (optional)
    - `CORS_ORIGINS` (optional, set to your Railway domain or `*`)
 3. Railway supplies `PORT` automatically.
-
-**Note:** If you get a `model_not_found` error for `gpt-5-image-mini` on Railway, set `OPENAI_MODEL=gpt-5-mini` in Railway's environment variables. Railway's OpenAI API may not have access to all model variants.
 
 The UI is served at the root URL (`/`), and the API lives under `/api`.

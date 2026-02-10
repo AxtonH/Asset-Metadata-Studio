@@ -9,7 +9,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from .config import DEFAULT_PROMPT, SETTINGS, DATA_DIR, STATIC_DIR
+from .config import (
+    DATA_DIR,
+    DEFAULT_PROMPT,
+    ENFORCEMENT_APPENDIX,
+    SETTINGS,
+    STATIC_DIR,
+)
 from .dedup import apply_duplicate_suffixes
 from .excel import write_excel
 from .file_utils import (
@@ -60,7 +66,8 @@ async def process_files(
     outputs_dir = job_dir / "outputs"
     outputs_dir.mkdir(parents=True, exist_ok=True)
 
-    prompt_text = (prompt or "").strip() or DEFAULT_PROMPT
+    base_prompt = (prompt or "").strip() or DEFAULT_PROMPT
+    prompt_text = f"{base_prompt}\n\n{ENFORCEMENT_APPENDIX}"
 
     tasks: list[AssetTask] = []
     for upload in files:
@@ -118,8 +125,8 @@ async def process_files(
         results = await process_assets(
             tasks,
             prompt_text,
-            SETTINGS.openai_api_key,
-            SETTINGS.openai_model,
+            SETTINGS.google_api_key,
+            SETTINGS.google_model,
             SETTINGS.max_concurrency,
         )
     except RuntimeError as exc:
